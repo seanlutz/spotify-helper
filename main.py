@@ -13,10 +13,10 @@ spotify = fn.getSpotifyObj()
 
 def likesFilterAndClear(number):
 	likesSongs = fn.getTracksFromPlaylist(spotify,username,'Likes')[:-number]
-	likesSongsIds = map(lambda x: x['track']['id'], likesSongs)
+	likesSongsIds = list(map(lambda x: x['track']['id'], likesSongs))
 	if len(likesSongs) > 0:
 		dupSongs = fn.getTracksFromPlaylist(spotify,username,'Country')
-		dupSongsIds = map(lambda x: x['track']['id'], dupSongs)
+		dupSongsIds = list(map(lambda x: x['track']['id'], dupSongs))
 		dups = {}
 		for i in range(len(dupSongsIds)):
 			if dupSongsIds[i] in dups:
@@ -30,14 +30,14 @@ def likesFilterAndClear(number):
 
 			fn.addTracksToPlaylist(spotify,username,'Likes Archive', likesSongsIds)
 			fn.addTracksToPlaylist(spotify,username,'Country', 
-				map(lambda x: x['track']['id'], 
+				list(map(lambda x: x['track']['id'], 
 					fn.filterTracksByGenre(spotify,username,likesSongs,['country']
-						)))
+						))))
 			fn.removeTracksFromPlaylist(spotify,username,'Likes', likesSongsIds)
 
 def deleteDups(playName):
 	dupSongs = fn.getTracksFromPlaylist(spotify,username,playName)
-	dupSongsIds = map(lambda x: x['track']['id'], dupSongs)
+	dupSongsIds = list(map(lambda x: x['track']['id'], dupSongs))
 	dups = {}
 	for i in range(len(dupSongsIds)):
 		if dupSongsIds[i] in dups:
@@ -62,7 +62,7 @@ def deleteDups(playName):
 	params = newlist = sorted(params, key=lambda x: x['positions'][0]) 
 	params = list(reversed(params))
 	while len(params) != 0:
-		print params[:1]
+		print(params[:1])
 		##
 		try:
 			spotify.user_playlist_remove_specific_occurrences_of_tracks(username, fn.getPlaylistId(spotify, username, 'Country') , params[:1])
